@@ -15,13 +15,22 @@ import { NextResponse, type NextRequest } from "next/server";
 
 const REDIRECT_PREFIXES = ["/auth", "/parcours", "/api"];
 const CANDIDAT_HOST = "https://candidat.clicknpop.fr";
+const APEX_HOST = "https://clicknpop.fr";
+const WWW_HOSTNAME = "www.clicknpop.fr";
 
 export function middleware(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
+  const host = request.headers.get("host") ?? "";
 
+  // 1. Canonical : www.clicknpop.fr → clicknpop.fr (301, préserve path + query)
+  if (host === WWW_HOSTNAME) {
+    return NextResponse.redirect(`${APEX_HOST}${pathname}${search}`, 301);
+  }
+
+  // 2. Legacy paths (anciens liens entrants emails Supabase, partages) :
+  //    clicknpop.fr/auth/* | /parcours/* | /api/* → candidat.clicknpop.fr/...
   if (REDIRECT_PREFIXES.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`))) {
-    const target = `${CANDIDAT_HOST}${pathname}${search}`;
-    return NextResponse.redirect(target, 301);
+    return NextResponse.redirect(`${CANDIDAT_HOST}${pathname}${search}`, 301);
   }
 
   return NextResponse.next();
