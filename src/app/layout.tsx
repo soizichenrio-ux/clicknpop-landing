@@ -2,18 +2,22 @@ import type { Metadata } from "next";
 import { fraunces, ibmPlexSans, ibmPlexMono } from "@/lib/fonts";
 import "./globals.css";
 
+const DESCRIPTION =
+  "Click'n Pop ne matche pas des CV. On cherche les conditions pour que ça tienne.";
+
 export const metadata: Metadata = {
-  title: "Click'n Pop — Le recrutement qui fait pop.",
-  description:
-    "Click'n Pop est une plateforme de recrutement éthique pour l'alternance et l'intérim. Le recrutement qui tient dans le temps.",
+  title: "Click'n Pop — Le recrutement qui fait pop",
+  description: DESCRIPTION,
   metadataBase: new URL("https://clicknpop.fr"),
+  robots: { index: true, follow: true },
   openGraph: {
-    title: "Click'n Pop",
-    description: "Le recrutement qui fait pop.",
+    title: "Click'n Pop — Le recrutement qui fait pop",
+    description: DESCRIPTION,
     url: "https://clicknpop.fr",
     siteName: "Click'n Pop",
     locale: "fr_FR",
     type: "website",
+    // TODO post-29 mai : og:image dédiée (1200x630)
   },
 };
 
